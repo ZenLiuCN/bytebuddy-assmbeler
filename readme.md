@@ -1,5 +1,5 @@
 # Assembler
-![](https://jitpack.io/v/ZenLiuCN/bytebuddy-assmbeler.svg)
+[![](https://jitpack.io/v/ZenLiuCN/bytebuddy-assmbeler.svg)](https://jitpack.io/#ZenLiuCN/bytebuddy-assmbeler)
 
 Utilities for use ByteBuddy to generate classes.
 
