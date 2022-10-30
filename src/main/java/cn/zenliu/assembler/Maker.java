@@ -20,6 +20,7 @@ import net.bytebuddy.description.type.TypeVariableToken;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1382,5 +1383,22 @@ public interface Maker<S extends Maker<S>> {
                 .superClass(desc.getSuperClass())
                 .implement(desc.getInterfaces());
     }
+    //endregion
+
+    //region TypeDescription.Generic
+
+    static Generic.Builder generic(TypeDescription.Generic desc) {return Generic.Builder.of(desc);}
+    static Generic.Builder generic(java.lang.reflect.Type desc) {return Generic.Builder.of(desc);}
+    static Generic.Builder generic(Class<?> rawType) {return Generic.Builder.rawType(rawType);}
+    static Generic.Builder generic(TypeDescription type,TypeDescription.Generic owner) {return Generic.Builder.rawType(type,owner);}
+    static Generic.Builder generic(String symbol) {return Generic.Builder.typeVariable(symbol);}
+    static Generic.Builder generic(Class<?> rawType, java.lang.reflect.Type... parameter) {return Generic.Builder.parameterizedType(rawType,parameter);}
+    static Generic.Builder generic(TypeDescription rawType, TypeDefinition... parameter) {return Generic.Builder.parameterizedType(rawType,parameter);}
+    static Generic.Builder generic(TypeDescription rawType, List<TypeDefinition> parameters) {return Generic.Builder.parameterizedType(rawType,parameters);}
+    //endregion
+
+    //region AnnotationDescription
+    static AnnotationDescription.Builder annotation(Class<? extends Annotation> type){return AnnotationDescription.Builder.ofType(type);}
+    static AnnotationDescription.Builder annotation(TypeDescription type){return AnnotationDescription.Builder.ofType(type);}
     //endregion
 }
