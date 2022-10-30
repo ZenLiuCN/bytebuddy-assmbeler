@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2022. Zen Liu.
+  ~ SPDX-License-Identifier: GPL-2.0-only WITH Classpath-exception-2.0
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <name>assembler</name>
+    <description>utilities for use byte-buddy build class.</description>
+    <url>https://www.github.com/ZenLiuCn/bytebuddy-assmebler</url>
+    <developers>
+        <developer>
+            <name>Zen Liu</name>
+            <email>lcz20@163.com</email>
+            <organization>ZenLiu</organization>
+            <organizationUrl>https://github.com/ZenLiuCN</organizationUrl>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+    <licenses>
+        <license>
+            <name>GNU General Public License v2.0 only WITH Classpath exception 2.0</name>
+            <url>https://raw.githubusercontent.com/google/licenseclassifier/main/licenses/GPL-2.0-with-classpath-exception.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <profiles>
+        <profile>
+            <id>release</id>
+        </profile>
+        <profile>
+            <id>with-source</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>with-javadoc</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>with-deploy-central</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>with-spdx</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.spdx</groupId>
+                        <artifactId>spdx-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>8</java.version>
+        <!-- remove the space here for idea bug -->
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <maven.main.skip>false</maven.main.skip>
+        <maven.deploy.skip>false</maven.deploy.skip>
+        <maven.install.skip>false</maven.install.skip>
+        <deployAtEnd>true</deployAtEnd>
+
+        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+
+        <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+        <spdx-maven-plugin.version>0.6.2</spdx-maven-plugin.version>
+
+        <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
+        <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
+        <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
+    </properties>
+    <groupId>io.github.zenliucn.java</groupId>
+    <artifactId>assembler</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.12.18</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.spdx</groupId>
+                    <artifactId>spdx-maven-plugin</artifactId>
+                    <version>${spdx-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>build-spdx</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>createSPDX</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <spdxFile>LICENSE.spdx</spdxFile>
+                        <defaultFileCopyright>Copyright (c) 2022 with authors.</defaultFileCopyright>
+                        <defaultFileContributors>
+                            <param>Zen Liu</param>
+                        </defaultFileContributors>
+                        <defaultLicenseInformationInFile>GPL-2.0-only WITH Classpath-exception-2.0
+                        </defaultLicenseInformationInFile>
+                        <defaultFileConcludedLicense>GPL-2.0-only WITH Classpath-exception-2.0
+                        </defaultFileConcludedLicense>
+                        <defaultFileNotice>
+                            SPDX-License-Identifier: GPL-2.0-only WITH Classpath-exception-2.0
+                            Copyright (c) 2022 with authors.
+                        </defaultFileNotice>
+                        <licenseDeclared>GPL-2.0-only WITH Classpath-exception-2.0</licenseDeclared>
+                        <licenseConcluded>GPL-2.0-only WITH Classpath-exception-2.0</licenseConcluded>
+                        <creators>
+                            <param>Person: Zen Liu</param>
+                        </creators>
+
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <inherited>true</inherited>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <excludeResources>true</excludeResources>
+                        <useDefaultExcludes>true</useDefaultExcludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                    <inherited>true</inherited>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <maxmemory>1024</maxmemory>
+                        <encoding>UTF-8</encoding>
+                        <show>protected</show>
+                        <notree>true</notree>
+                        <additionalOptions>-Xdoclint:none</additionalOptions>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${maven-release-plugin.version}</version>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <releaseProfiles>release</releaseProfiles>
+                        <goals>deploy</goals>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${maven-gpg-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <gpgArguments>
+                            <arg>&#45;&#45;pinentry-mode</arg>
+                            <arg>loopback</arg>
+                        </gpgArguments>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>${nexus-staging-maven-plugin.version}</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+
+    </build>
+</project>
