@@ -1032,6 +1032,11 @@ public interface Maker<S extends Maker<S>> {
 
             List<TypeVariableToken> $typeVariables();
 
+            @Override
+            default void $validate() {
+                if($typeVariables()==null)$typeVariables(emptyList());
+            }
+
             default S addTypeVariable(TypeVariableToken val) {
                 List<TypeVariableToken> v = $typeVariables();
                 if (v == null) $typeVariables(v = new ArrayList<>());
@@ -1116,7 +1121,7 @@ public interface Maker<S extends Maker<S>> {
             Annotations.super.$validate();
             ReturnType.super.$validate();
             ParameterToken.Many.super.$validate();
-            ParameterToken.Many.super.$validate();
+            TypeVariable.Many.super.$validate();
             ExceptionTypes.Generic.super.$validate();
             List<Generic> exceptionTypes = $exceptionTypes();
             if (exceptionTypes != null && !exceptionTypes.stream().map(TypeDefinition::asErasure).allMatch(IS_THROWABLE::matches))
