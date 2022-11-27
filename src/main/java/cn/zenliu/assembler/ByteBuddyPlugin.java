@@ -31,7 +31,7 @@ public class ByteBuddyPlugin implements Plugin {
         this.classRoot = classRoot;
         this.logger = logger;
         this.extensions = new ArrayList<>();
-        ServiceLoader.load(Extension.class).forEach(this.extensions::add);
+        ServiceLoader.load(Extension.class,this.getClass().getClassLoader()).forEach(this.extensions::add);
         matchers = new HashMap<>();
         Junction<TypeDescription> m = null;
         for (Extension ext : extensions) {
