@@ -52,5 +52,5 @@ use with maven for compile time enhancement:
     </plugin>
 ```
 
-## LICENCE
+## License
 GPL-2.0-only WITH Classpath-exception-2.0 (SPDX identifier)
